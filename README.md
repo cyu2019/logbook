@@ -6,6 +6,8 @@ The logbook is a program that was written when 50 pins for stupid messages just 
 
 To run:
 
+(You're going to have to have node / npm installed)
+
 1. `npm install`
 This installs the necessary packages.
 
