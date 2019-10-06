@@ -1,0 +1,15 @@
+{
+  "name": "logbook",
+  "version": "1.0.0",
+  "description": "A discord bot that will record messages and send them to a specified channel. For when you don't have enough pinned messages.",
+  "main": "main.js",
+  "dependencies": {
+    "discord.js": "^11.5.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node main"
+  },
+  "author": "orz",
+  "license": "ISC"
+}
