@@ -2,19 +2,31 @@
 
 A program originally written by wrxryuu in python, ported to node.js and with new functionality.
 
+The logbook is a program that was written when 50 pins for stupid messages just wasn't enough. This bot will intercept message pins and post them to a special designated logbook channel. Members without pin permissions can use a command to log instead, if allowed.
 
 To run:
 
-`npm install`
+1. `npm install`
+This installs the necessary packages.
 
-This installs the necessary packages
+2. `node main` This will generate a settings.json file which you should put your token into.
 
-`node main`
+3. `node main` Do it again to actually run the bot.
 
-This will generate a settings.json file which you should put your token into. Then do
+Commands:
 
-`node main`
+```
+[ !setlogbook ] - (needs manage channels perm) Sets the logbook to the current channel. Logged messages will go here.
 
-again to actually run the bot.
+[ !watch ] - (needs manage channels perm) Sets the current channel to be 'watched.' Pinning messages in this channel will be sent to the logbook instead of the regular pinned messages.
 
-Do !help to look at all the commands.
+[ !unwatch ] - (needs manage channels perm) Reverts current channel to usual pinning functionality
+
+[ !save ] - (needs manage channels perm) Saves your current settings (logbook channel, watched channels). This will run every five minutes anyway, so you probably don't need to run it.
+
+[ !log  ] - Takes in the id of a message in the current channel (turn on developer mode and right click -> 'Copy ID') and puts the message into the logbook. By default, you need manage channel perms to use this.
+
+[ !toggleEveryone ] - (needs manage channels perm) Allows all members to use the !log command (by default they cannot). Use it once to enable, again to disable.
+
+[ !help ] - Displays a short description of each command.
+```
