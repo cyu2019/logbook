@@ -51,7 +51,7 @@ function log(msg) {
 }
 
 // Initial settings load
-if (!fs.existsSync("./settings.json") || token == "") {
+if (!fs.existsSync("./settings.json")) {
   saveSettings();
   console.log("This is your first time running me! Put your bot token in the token field of settings.json.");
   process.exit();
