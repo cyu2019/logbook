@@ -135,7 +135,7 @@ var commands = {
       msg.channel.send("All members can"+(allowAllMembers? "":"not") + " use the !log command.");
     }
   },"!say ": {
-    "description":"Makes your logbook bot say something. =",
+    "description":"Make your logbook bot say something stupid.",
     "action": function(msg) {
       var sayMsg = msg.content.substring('!log '.length)
       msg.channel.send(sayMsg).then(()=>{
