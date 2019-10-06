@@ -51,9 +51,10 @@ function log(msg) {
 }
 
 // Initial settings load
-if (!fs.existsSync("./settings.json")) {
+if (!fs.existsSync("./settings.json") || token == "") {
   saveSettings();
-  console.log("This is your first time running me! Put your bot token in the token field of settings.json.")
+  console.log("This is your first time running me! Put your bot token in the token field of settings.json.");
+  quit();
 } else {
   var {token, logbookChannelID, interceptPinChannels, allowAllMembers} = JSON.parse(fs.readFileSync("settings.json"));
 }
