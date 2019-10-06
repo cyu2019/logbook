@@ -1,6 +1,6 @@
 # Logbook
 
-A program originally written by wrxryuu in python, ported to use [discord.js](https://discord.js.org/#/) and with new functionality.
+A program originally written by [@wrxruo](https://github.com/wrxruo) in discord.py, ported to [discord.js](https://discord.js.org/#/)  with added functionality.
 
 The logbook is a program that was written when 50 pins for stupid messages just wasn't enough. This bot will intercept message pins and post them to a special designated logbook channel. Members without pin permissions can use a command to log instead, if allowed.
 
