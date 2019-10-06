@@ -8,10 +8,14 @@ var logbookChannel = null;
 var interceptPinChannels = {};
 var allowAllMembers = false;
 
+// saves to settings.json
 function saveSettings() {
   logbookChannelID = logbookChannel? logbookChannel.id : null;
   fs.writeFileSync("./settings.json", JSON.stringify({token, logbookChannelID, interceptPinChannels, allowAllMembers}));
 }
+
+// generates a Discord RichEmbed from message.
+// it only looks for one image right now, because I'm a bit lazy.
 function logEmbed(msg) {
   var data = {
     'footer':{'text':new Date().toLocaleDateString()},
@@ -27,7 +31,7 @@ function logEmbed(msg) {
   return new Discord.RichEmbed(data);
 }
 
-
+// Initial settings load
 if (!fs.existsSync("./settings.json")) {
   saveSettings();
   console.log("This is your first time running me! Put your bot token in the token field of settings.json.")
@@ -35,14 +39,15 @@ if (!fs.existsSync("./settings.json")) {
   var {token, logbookChannelID, interceptPinChannels, allowAllMembers} = JSON.parse(fs.readFileSync("settings.json"));
 }
 
-
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
   logbookChannel = client.channels.get(logbookChannelID);
 });
 
+// settings save loop
 client.setInterval(saveSettings, 1000 * 60 * 5);
 
+// object to hold commands
 var commands = {
   "!setlogbook": {
     "description":"(needs manage channels perm) Sets the logbook to the current channel. Logged messages will go here.",
@@ -125,6 +130,10 @@ var commands = {
 
 }
 
+
+// pin detection code
+// when message goes from not pinned to pinned, the message edit was a pin.
+// for some reason when you pin a message then unpin then pin again, it doesn't detect the pin the second time.
 client.on('messageUpdate', (oldMsg, newMsg) => {
   if (!interceptPinChannels[newMsg.channel.id])
     return;
@@ -139,6 +148,7 @@ client.on('messageUpdate', (oldMsg, newMsg) => {
   }
 });
 
+// What actually reads and runs the commands.
 client.on('message', msg => {
   if (msg.author.bot)
     return;
