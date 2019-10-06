@@ -17,18 +17,37 @@ function saveSettings() {
 // generates a Discord RichEmbed from message.
 // it only looks for one image right now, because I'm a bit lazy.
 function logEmbed(msg) {
-  var data = {
-    'footer':{'text':new Date().toLocaleDateString()},
-    'author':{'name':msg.author.username,'icon_url':msg.author.avatarURL},
-    'description':msg.content,
-    'color':0xe8c67d
-  }
+  var embed = new Discord.RichEmbed()
+    .setFooter(new Date().toLocaleDateString())
+    .setAuthor(msg.author.username, msg.author.avatarURL)
+    .setColor("#e8c67d")
+    .setDescription(msg.content);
   if (msg.attachments.first()) {
-    console.log(msg.attachments.first());
-    data.image = {'url': msg.attachments.first().url}
+    embed.setImage(msg.attachments.first().url);
   }
-  console.log(data);
-  return new Discord.RichEmbed(data);
+  return embed;
+}
+
+// log a message.
+function log(msg) {
+  var embed = new Discord.RichEmbed()
+    .setFooter(new Date().toLocaleDateString())
+    .setAuthor(msg.author.username, msg.author.avatarURL)
+    .setColor("#e8c67d")
+    .setDescription(msg.content);
+  var images = msg.attachments.map(e => {
+    return e.url;
+  });
+  if (images.length == 1) { // 1 image case
+    embed.setImage(images[0]);
+    logbookChannel.send(embed);
+  } else if (images.length > 1) { // multiple image case -- discord.js has no way to add multiple images to embed :(
+    logbookChannel.send({files: images}).then(()=>{
+      logbookChannel.send(embed);
+    })
+  } else { // just send the embed
+    logbookChannel.send(embed);
+  }
 }
 
 // Initial settings load
@@ -99,7 +118,7 @@ var commands = {
         msg.channel.fetchMessage(id).then(found => {
           if (found) {
             msg.channel.send("**Logged!**")
-            logbookChannel.send(logEmbed(found));
+            log(found);
           } else
             msg.channel.send("I couldn't find a message in this channel with that ID.");
         });
@@ -114,6 +133,14 @@ var commands = {
         return msg.channel.send("You don't have sufficient permissions.");
       allowAllMembers = !allowAllMembers;
       msg.channel.send("All members can"+(allowAllMembers? "":"not") + " use the !log command.");
+    }
+  },"!say ": {
+    "description":"Makes your logbook bot say something. =",
+    "action": function(msg) {
+      var sayMsg = msg.content.substring('!log '.length)
+      msg.channel.send(sayMsg).then(()=>{
+        msg.delete();
+      });
     }
   },
   "!help": {
@@ -133,16 +160,14 @@ var commands = {
 
 // pin detection code
 // when message goes from not pinned to pinned, the message edit was a pin.
-// for some reason when you pin a message then unpin then pin again, it doesn't detect the pin the second time.
 client.on('messageUpdate', (oldMsg, newMsg) => {
   if (!interceptPinChannels[newMsg.channel.id])
     return;
-
   if (!oldMsg.pinned && newMsg.pinned) {
     if (logbookChannel) {
       newMsg.unpin();
       newMsg.channel.send("Intercepting pin: **Logged!**");
-      logbookChannel.send(logEmbed(newMsg));
+      log(newMsg);
     } else
       newMsg.channel.send("Pin not intercepted: You haven't set a valid logbook channel!");
   }
