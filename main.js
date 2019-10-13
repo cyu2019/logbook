@@ -157,12 +157,12 @@ var commands = {
           logs = messages;
         else
           logs = logs.concat(messages);
-        console.log(logs.last().content);
+        //console.log(logs.last().content);
         if (messages.size == 50) {
           logbookChannel.fetchMessages({before: logs.lastKey()}).then(getMoreMessages)
         } else {
           var log = logs.random();
-          console.log(log.embeds);
+          //console.log(log.embeds);
           if (log.embeds.length > 0)
             msg.channel.send(new Discord.RichEmbed(log.embeds[0]));
           else
