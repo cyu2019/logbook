@@ -30,7 +30,9 @@ Commands:
 
 [ !toggleEveryone ] - (needs manage channels perm) Allows all members to use the !log command (by default they cannot). Use it once to enable, again to disable.
 
-[ !say ] - Make your logbook bot say something stupid.
+[ !say  ] - Make your logbook bot say something stupid.
+
+[ !randlog ] - Reminisce on old times. Sends a random log from the past.
 
 [ !help ] - Displays a short description of each command.
 ```

@@ -138,10 +138,39 @@ var commands = {
   },"!say ": {
     "description":"Make your logbook bot say something stupid.",
     "action": function(msg) {
-      var sayMsg = msg.content.substring('!log '.length)
+      var sayMsg = msg.content.substring('!say '.length)
       msg.channel.send(sayMsg).then(()=>{
         msg.delete();
       });
+    }
+  },
+  "!randlog": {
+    "description":"Reminisce on old times. Sends a random log from the past.",
+    "action": function(msg) {
+      if (!logbookChannel)
+        return msg.channel.send("You haven't set a valid logbook channel!");
+
+      var logs = null;
+      const getMoreMessages = messages => {
+
+        if (logs == null)
+          logs = messages;
+        else
+          logs = logs.concat(messages);
+        console.log(logs.last().content);
+        if (messages.size == 50) {
+          logbookChannel.fetchMessages({before: logs.lastKey()}).then(getMoreMessages)
+        } else {
+          var log = logs.random();
+          console.log(log.embeds);
+          if (log.embeds.length > 0)
+            msg.channel.send(new Discord.RichEmbed(log.embeds[0]));
+          else
+            msg.channel.send(log.content);
+        }
+      }
+
+      logbookChannel.fetchMessages().then(getMoreMessages)
     }
   },
   "!help": {
