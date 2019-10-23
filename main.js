@@ -186,7 +186,8 @@ var commands = {
   }
 
 }
-
+//error handle
+client.on('error', console.error);
 
 // pin detection code
 // when message goes from not pinned to pinned, the message edit was a pin.
